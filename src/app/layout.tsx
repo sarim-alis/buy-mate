@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/contexts/ThemeContext";
-import { FavoritesProvider } from "@/contexts/FavoritesContext";
+import { StoreProvider } from "@/store/StoreProvider";
 import { Header } from "@/components/Header";
 
 const geistSans = Geist({
@@ -16,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShopHub - Your Ecommerce Store",
+  title: "Buy Mate",
   description: "Browse and shop from our extensive collection of products",
 };
 
@@ -30,14 +29,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          <FavoritesProvider>
-            <Header />
-            <main className="min-h-screen">
-              {children}
-            </main>
-          </FavoritesProvider>
-        </ThemeProvider>
+        <StoreProvider>
+          <Header />
+          <main className="min-h-screen">
+            {children}
+          </main>
+        </StoreProvider>
       </body>
     </html>
   );

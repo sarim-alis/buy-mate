@@ -1,17 +1,19 @@
 "use client"
 
 import { Moon, Sun } from 'lucide-react'
-import { useTheme } from '@/contexts/ThemeContext'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { toggleTheme } from '@/store/slices/themeSlice'
 import { Button } from '@/components/ui/button'
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme()
+  const dispatch = useAppDispatch()
+  const theme = useAppSelector((state) => state.theme.theme)
 
   return (
     <Button
       variant="outline"
       size="icon"
-      onClick={toggleTheme}
+      onClick={() => dispatch(toggleTheme())}
       aria-label="Toggle theme"
     >
       {theme === 'light' ? (

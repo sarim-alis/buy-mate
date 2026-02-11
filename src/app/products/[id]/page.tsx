@@ -5,7 +5,8 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, Heart, Star, Package, TrendingUp } from 'lucide-react'
 import { fetchProductById, Product } from '@/lib/api'
-import { useFavorites } from '@/contexts/FavoritesContext'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { toggleFavorite } from '@/store/slices/favoritesSlice'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -14,7 +15,8 @@ import { formatDate } from '@/lib/dateUtils'
 export default function ProductDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const { isFavorite, toggleFavorite } = useFavorites()
+  const dispatch = useAppDispatch()
+  const favorites = useAppSelector((state) => state.favorites.favorites)
   
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
@@ -73,7 +75,7 @@ export default function ProductDetailPage() {
     )
   }
 
-  const favorite = isFavorite(product.id)
+  const favorite = favorites.includes(product.id)
   const discountedPrice = product.price * (1 - product.discountPercentage / 100)
 
   return (
@@ -132,7 +134,7 @@ export default function ProductDetailPage() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => toggleFavorite(product.id)}
+                onClick={() => dispatch(toggleFavorite(product.id))}
                 className="shrink-0"
                 aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
               >

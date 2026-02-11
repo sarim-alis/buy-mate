@@ -1,12 +1,34 @@
 import { NextResponse } from 'next/server';
 
+async function fetchWithRetry(url: string, options: RequestInit, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+      
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+    }
+  }
+  throw new Error('Max retries reached');
+}
+
 export async function GET() {
   try {
-    const response = await fetch('https://dummyjson.com/products/categories', {
+    const response = await fetchWithRetry('https://dummyjson.com/products/categories', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
+      cache: 'no-store',
     });
 
     if (!response.ok) {
@@ -15,7 +37,6 @@ export async function GET() {
 
     const data = await response.json();
     
-    // Transform array of objects to array of strings (slugs)
     const categories = Array.isArray(data) 
       ? data.map((cat: any) => typeof cat === 'string' ? cat : cat.slug || cat.name)
       : data;
@@ -24,7 +45,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching categories:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch categories' },
+      { error: 'Failed to fetch categories', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

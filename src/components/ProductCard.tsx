@@ -4,7 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Heart, Star } from 'lucide-react'
 import { Product } from '@/lib/api'
-import { useFavorites } from '@/contexts/FavoritesContext'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { toggleFavorite } from '@/store/slices/favoritesSlice'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/dateUtils'
@@ -14,8 +15,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { isFavorite, toggleFavorite } = useFavorites()
-  const favorite = isFavorite(product.id)
+  const dispatch = useAppDispatch()
+  const favorites = useAppSelector((state) => state.favorites.favorites)
+  const favorite = favorites.includes(product.id)
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -42,7 +44,7 @@ export function ProductCard({ product }: ProductCardProps) {
             size="icon"
             onClick={(e) => {
               e.preventDefault()
-              toggleFavorite(product.id)
+              dispatch(toggleFavorite(product.id))
             }}
             className="shrink-0"
             aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
