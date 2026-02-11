@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 
+type RouteContext = {
+  params: Promise<{ id: string }>
+}
+
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
-    const response = await fetch(`https://dummyjson.com/products/${params.id}`, {
+    const { id } = await context.params;
+    const response = await fetch(`https://dummyjson.com/products/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
