@@ -13,9 +13,10 @@ import { formatDateShort } from '@/lib/dateUtils'
 
 interface ProductCardProps {
   product: Product
+  priority?: boolean
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, priority = false }: ProductCardProps) {
   const dispatch = useAppDispatch()
   const favorites = useAppSelector((state) => state.favorites.favorites)
   const favorite = favorites.includes(product.id)
@@ -30,6 +31,7 @@ export function ProductCard({ product }: ProductCardProps) {
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={priority}
           />
         </div>
       </Link>

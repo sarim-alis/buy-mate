@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter } from 'lucide-react'
 import { fetchAllProducts, fetchCategories, Product } from '@/lib/api'
@@ -22,6 +22,14 @@ import { useDebounce } from '@/hooks/useDebounce'
 const PRODUCTS_PER_PAGE = 10
 
 export default function Home() {
+  return (
+    <Suspense fallback={<LoadingSpinnerWithText />}>
+      <HomeContent />
+    </Suspense>
+  )
+}
+
+function HomeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -238,7 +246,7 @@ export default function Home() {
                 className="animate-in fade-in slide-in-from-bottom-4"
                 style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} priority={index < 4} />
               </div>
             ))}
           </div>

@@ -59,6 +59,7 @@ export function CartSheet() {
                         alt={item.title}
                         fill
                         className="object-cover"
+                        sizes="80px"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
