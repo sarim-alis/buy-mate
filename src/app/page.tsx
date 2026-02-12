@@ -3,13 +3,19 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter } from 'lucide-react'
-import { Select } from 'antd'
 import { fetchAllProducts, fetchCategories, Product } from '@/lib/api'
 import { ProductCard } from '@/components/ProductCard'
 import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { ProductsChart } from '@/components/ProductsChart'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { DateRangePicker } from '@/components/DateRangePicker'
 import { useDebounce } from '@/hooks/useDebounce'
 
@@ -26,11 +32,11 @@ export default function Home() {
   
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all')
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null] | null>(() => {
+  const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null } | null>(() => {
     const from = searchParams.get('dateFrom')
     const to = searchParams.get('dateTo')
     if (from && to) {
-      return [new Date(from), new Date(to)]
+      return { from: new Date(from), to: new Date(to) }
     }
     return null
   })
@@ -69,9 +75,9 @@ export default function Home() {
     const params = new URLSearchParams()
     if (debouncedSearchQuery) params.set('search', debouncedSearchQuery)
     if (selectedCategory !== 'all') params.set('category', selectedCategory)
-    if (dateRange && dateRange[0]) {
-      params.set('dateFrom', dateRange[0].toISOString())
-      if (dateRange[1]) params.set('dateTo', dateRange[1].toISOString())
+    if (dateRange && dateRange.from) {
+      params.set('dateFrom', dateRange.from.toISOString())
+      if (dateRange.to) params.set('dateTo', dateRange.to.toISOString())
     }
     
     const queryString = params.toString()
@@ -93,11 +99,11 @@ export default function Home() {
       filtered = filtered.filter(product => product.category === selectedCategory)
     }
 
-    if (dateRange && dateRange[0]) {
+    if (dateRange && dateRange.from) {
       filtered = filtered.filter(product => {
         const productDate = product.dateAdded
-        const fromDate = dateRange[0]!
-        const toDate = dateRange[1] || dateRange[0]!
+        const fromDate = dateRange.from!
+        const toDate = dateRange.to || dateRange.from!
         
         const productTime = productDate.getTime()
         const fromTime = new Date(fromDate).setHours(0, 0, 0, 0)
@@ -127,7 +133,7 @@ export default function Home() {
     setCurrentPage(1)
   }
 
-  const hasActiveFilters = debouncedSearchQuery || selectedCategory !== 'all' || (dateRange && dateRange[0])
+  const hasActiveFilters = debouncedSearchQuery || selectedCategory !== 'all' || (dateRange && dateRange.from)
 
   if (error) {
     return (
@@ -175,19 +181,19 @@ export default function Home() {
           </div>
 
           <div className="w-full lg:w-1/4">
-            <Select
-              value={selectedCategory}
-              onChange={setSelectedCategory}
-              className="w-full h-10"
-              placeholder="All Categories"
-              options={[
-                { value: 'all', label: 'All Categories' },
-                ...categories.map((category) => ({
-                  value: category,
-                  label: category.charAt(0).toUpperCase() + category.slice(1)
-                }))
-              ]}
-            />
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent className="bg-background text-foreground z-[200]">
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="w-full lg:w-1/2">
@@ -198,11 +204,7 @@ export default function Home() {
           </div>
         </div>
 
-        {!loading && products.length > 0 && (
-          <div className="mb-8">
-            <ProductsChart products={products} />
-          </div>
-        )}
+      
 
         {hasActiveFilters && filteredProducts.length > 0 && (
           <div className="mb-6 flex items-center justify-between bg-muted/50 rounded-lg p-4">
@@ -211,9 +213,6 @@ export default function Home() {
               <p className="text-sm text-muted-foreground">
                 Showing {filteredProducts.length} result{filteredProducts.length !== 1 ? 's' : ''}
               </p>
-              <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-                Clear all filters
-              </Button>
             </div>
           </div>
         )}
@@ -222,7 +221,7 @@ export default function Home() {
       {loading ? (
         <LoadingSpinnerWithText text="Loading products..." />
       ) : filteredProducts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="flex flex-col items-center justify-center min-h-100 gap-4">
           <p className="text-lg text-muted-foreground">No products found</p>
           {hasActiveFilters && (
             <Button variant="outline" onClick={handleClearFilters}>
@@ -287,6 +286,11 @@ export default function Home() {
           )}
         </>
       )}
+        {!loading && products.length > 0 && (
+          <div className="mb-8">
+            <ProductsChart products={products} />
+          </div>
+        )}
     </div>
   )
 }
