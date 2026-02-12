@@ -36,9 +36,8 @@ const themeSlice = createSlice({
           state.theme = savedTheme
           document.documentElement.classList.toggle('dark', savedTheme === 'dark')
         } else {
-          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-          state.theme = prefersDark ? 'dark' : 'light'
-          document.documentElement.classList.toggle('dark', prefersDark)
+          state.theme = 'light'
+          document.documentElement.classList.remove('dark')
         }
       }
     },

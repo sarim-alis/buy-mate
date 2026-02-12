@@ -14,7 +14,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <ShoppingBag className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">ShopHub</span>
+            <span className="text-xl font-bold">BuyMate</span>
           </Link>
           
           <div className="flex items-center gap-4">
