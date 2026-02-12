@@ -128,9 +128,9 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mb-8 space-y-4">
+      <div className="mb-82 space-y-4">
         <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1">
+          <div className="w-full lg:w-1/4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -141,23 +141,8 @@ export default function Home() {
               />
             </div>
           </div>
-          
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-full lg:w-[200px]">
-              <Filter className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              {categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
 
-          <div className="w-full lg:w-[300px]">
+          <div className="w-full lg:w-3/4">
             <DateRangePicker
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
