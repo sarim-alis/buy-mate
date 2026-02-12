@@ -77,12 +77,12 @@
 }
 
 * {
-  border-color: hsl(var(--border));
+  border-color: var(--border);
 }
 
 body {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background: var(--background);
+  color: var(--foreground);
 }
 
 @theme inline {

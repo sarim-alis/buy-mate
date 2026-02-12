@@ -185,7 +185,7 @@ export default function Home() {
               <SelectTrigger className="w-full h-10">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
-              <SelectContent className="bg-background text-foreground z-[200]">
+              <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category} value={category}>
@@ -270,7 +270,7 @@ export default function Home() {
                       </Button>
                     )
                   } else if (page === currentPage - 2 || page === currentPage + 2) {
-                    return <span key={page} className="px-2">...</span>
+                    return <span key={page} className="px-2 text-foreground">...</span>
                   }
                   return null
                 })}

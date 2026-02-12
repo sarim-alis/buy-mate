@@ -57,7 +57,7 @@ export function DateRangePicker({ dateRange, onDateRangeChange }: DateRangePicke
         <Button
           variant="outline"
           className={cn(
-            "w-full h-10 justify-start text-left font-normal",
+            "w-full h-10 justify-start text-left font-normal bg-background text-foreground border-input hover:bg-accent hover:text-accent-foreground",
             !date && "text-muted-foreground"
           )}
         >

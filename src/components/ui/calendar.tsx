@@ -46,17 +46,17 @@ function Calendar({
         ),
 
         day_selected:
-          "bg-indigo-600 text-white hover:bg-indigo-700 focus:bg-indigo-600",
+          "bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white focus:bg-indigo-600 focus:text-white dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700",
 
         day_today:
-          "border border-indigo-400 font-semibold",
+          "border border-indigo-400 dark:border-indigo-500 font-semibold",
 
         day_outside: "text-muted-foreground opacity-40",
 
         day_disabled: "text-muted-foreground opacity-30",
 
         day_range_middle:
-          "aria-selected:bg-indigo-100 aria-selected:text-foreground",
+          "aria-selected:bg-indigo-100 dark:aria-selected:bg-indigo-900 aria-selected:text-foreground",
 
         day_hidden: "invisible",
 
