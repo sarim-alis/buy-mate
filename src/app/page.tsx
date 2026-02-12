@@ -43,8 +43,8 @@ function HomeContent() {
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null } | null>(() => {
     const from = searchParams.get('dateFrom')
     const to = searchParams.get('dateTo')
-    if (from && to) {
-      return { from: new Date(from), to: new Date(to) }
+    if (from) {
+      return { from: new Date(from), to: to ? new Date(to) : null }
     }
     return null
   })

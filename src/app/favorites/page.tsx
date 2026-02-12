@@ -19,15 +19,19 @@ export default function FavoritesPage() {
   useEffect(() => {
     async function loadFavorites() {
       if (favoriteIds.length === 0) {
+        setFavoriteProducts([])
         setLoading(false)
         return
       }
 
       try {
         setLoading(true)
-        const products = await Promise.all(
+        const results = await Promise.allSettled(
           favoriteIds.map(id => fetchProductById(String(id)))
         )
+        const products = results
+          .filter((r): r is PromiseFulfilledResult<Product> => r.status === 'fulfilled')
+          .map(r => r.value)
         setFavoriteProducts(products)
         setError(null)
       } catch (err) {

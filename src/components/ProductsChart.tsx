@@ -61,12 +61,12 @@ export function ProductsChart({ products }: ProductsChartProps) {
             />
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: 'hsl(var(--popover))',
-                border: '1px solid hsl(var(--border))',
+                backgroundColor: 'var(--popover)',
+                border: '1px solid var(--border)',
                 borderRadius: '0.5rem',
-                color: 'hsl(var(--popover-foreground))'
+                color: 'var(--popover-foreground)'
               }}
-              labelStyle={{ color: 'hsl(var(--popover-foreground))' }}
+              labelStyle={{ color: 'var(--popover-foreground)' }}
             />
             <Area 
               type="monotone" 
