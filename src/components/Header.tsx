@@ -18,14 +18,14 @@ export function Header() {
             <span className="text-xl font-bold">BuyMate</span>
           </Link>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8">
             <Link 
               href="/favorites" 
               className="relative flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity"
             >
               <Heart className="h-6 w-6 text-red-500 fill-red-500 hover:text-red-600 hover:fill-red-600 transition-colors" />
               {favoritesCount > 0 && (
-                <span className="absolute -top-1 -left-3 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-background shadow-sm">
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-md font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-background shadow-sm">
                   {favoritesCount}
                 </span>
               )}
