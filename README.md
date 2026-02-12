@@ -326,8 +326,14 @@ This project is created as a technical assessment task.
 
 ## 🙏 Acknowledgments
 
-- [Next.js](https://nextjs.org/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [DummyJSON](https://dummyjson.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Lucide Icons](https://lucide.dev/)
+- [Next.js](https://nextjs.org/) - React framework
+- [Redux Toolkit](https://redux-toolkit.js.org/) - State management
+- [shadcn/ui](https://ui.shadcn.com/) - UI component library
+- [Recharts](https://recharts.org/) - Data visualization
+- [DummyJSON](https://dummyjson.com/) - Mock API
+- [Tailwind CSS](https://tailwindcss.com/) - Styling framework
+- [Lucide Icons](https://lucide.dev/) - Icon library
+
+## 📧 Contact
+
+For questions or feedback about this implementation, please contact the development team.
