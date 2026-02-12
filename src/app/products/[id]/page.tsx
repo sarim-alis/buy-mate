@@ -81,11 +81,11 @@ export default function ProductDetailPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <Button
-        variant="ghost"
+        variant="outline"
         onClick={() => router.push('/')}
-        className="mb-8"
+        className="mb-8 hover:bg-primary hover:text-primary-foreground transition-all duration-200 hover:scale-105"
       >
-        <ArrowLeft className="mr-2 h-4 w-4" />
+        <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
         Back to Products
       </Button>
 

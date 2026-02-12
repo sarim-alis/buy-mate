@@ -95,11 +95,11 @@ export default function Home() {
   const handleClearFilters = () => {
     setSearchQuery('')
     setSelectedCategory('all')
-    setDateRange(undefined)
+    setDateRange(null)
     setCurrentPage(1)
   }
 
-  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || dateRange?.from
+  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || (dateRange && dateRange[0])
 
   if (error) {
     return (
@@ -114,11 +114,22 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Products</h1>
-        <p className="text-muted-foreground">
-          Browse our collection of {products.length} amazing products
-        </p>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">Products</h1>
+          <p className="text-muted-foreground">
+            Browse our collection of {products.length} amazing products
+          </p>
+        </div>
+        {hasActiveFilters && (
+          <Button 
+            variant="outline" 
+            onClick={handleClearFilters}
+            className="shrink-0"
+          >
+            Clear Filters
+          </Button>
+        )}
       </div>
 
       <div className="mb-8 space-y-4">
