@@ -2,18 +2,12 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { Search, Filter } from 'lucide-react'
+import { Select } from 'antd'
 import { fetchAllProducts, fetchCategories, Product } from '@/lib/api'
 import { ProductCard } from '@/components/ProductCard'
 import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { DateRangePicker } from '@/components/DateRangePicker'
 
 const PRODUCTS_PER_PAGE = 10
@@ -141,7 +135,23 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-full lg:w-3/4">
+          <div className="w-full lg:w-1/4">
+            <Select
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              className="w-full h-10"
+              placeholder="All Categories"
+              options={[
+                { value: 'all', label: 'All Categories' },
+                ...categories.map((category) => ({
+                  value: category,
+                  label: category.charAt(0).toUpperCase() + category.slice(1)
+                }))
+              ]}
+            />
+          </div>
+
+          <div className="w-full lg:w-1/2">
             <DateRangePicker
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
