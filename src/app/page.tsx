@@ -239,15 +239,9 @@ function HomeContent() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8 animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {paginatedProducts.map((product, index) => (
-              <div 
-                key={product.id}
-                className="animate-in fade-in slide-in-from-bottom-4"
-                style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
-              >
-                <ProductCard product={product} priority={index < 4} />
-              </div>
+              <ProductCard key={product.id} product={product} priority={index < 4} index={index} />
             ))}
           </div>
 

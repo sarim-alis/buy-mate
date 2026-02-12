@@ -14,6 +14,7 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet'
 import Image from 'next/image'
+import toast from 'react-hot-toast'
 
 export function CartSheet() {
   const dispatch = useAppDispatch()
@@ -87,7 +88,10 @@ export function CartSheet() {
                           variant="ghost"
                           size="icon"
                           className="h-7 w-7 ml-auto text-destructive hover:text-destructive"
-                          onClick={() => dispatch(removeFromCart(item.id))}
+                          onClick={() => {
+                            dispatch(removeFromCart(item.id))
+                            toast.success(`${item.title} removed from cart`)
+                          }}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -107,11 +111,11 @@ export function CartSheet() {
                   <span>${totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1" onClick={() => dispatch(clearCart())}>
+                  <Button variant="outline" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white hover:text-white" onClick={() => {
+                    dispatch(clearCart())
+                    toast.success('Cart cleared')
+                  }}>
                     Clear Cart
-                  </Button>
-                  <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700">
-                    Checkout
                   </Button>
                 </div>
               </div>

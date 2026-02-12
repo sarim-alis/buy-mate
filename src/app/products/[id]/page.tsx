@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { formatDate } from '@/lib/dateUtils'
+import toast from 'react-hot-toast'
 
 export default function ProductDetailPage() {
   const params = useParams()
@@ -119,7 +120,10 @@ export default function ProductDetailPage() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => dispatch(toggleFavorite(product.id))}
+                onClick={() => {
+                  dispatch(toggleFavorite(product.id))
+                  toast.success(favorite ? 'Removed from favorites' : 'Added to favorites')
+                }}
                 className="shrink-0"
                 aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
               >
@@ -172,12 +176,15 @@ export default function ProductDetailPage() {
 
             <Button 
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 text-lg font-semibold transition-all hover:scale-105"
-              onClick={() => dispatch(addToCart({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                thumbnail: product.thumbnail
-              }))}
+              onClick={() => {
+                dispatch(addToCart({
+                  id: product.id,
+                  title: product.title,
+                  price: product.price,
+                  thumbnail: product.thumbnail
+                }))
+                toast.success(`${product.title} added to cart`)
+              }}
             >
               <ShoppingCart className="h-5 w-5 mr-2" />
               Add to Cart
@@ -227,15 +234,6 @@ export default function ProductDetailPage() {
             <p className="text-sm text-muted-foreground">
               Added on {formatDate(product.dateAdded)}
             </p>
-          </div>
-
-          <div className="flex gap-4 pt-4">
-            <Button size="lg" className="flex-1">
-              Add to Cart
-            </Button>
-            <Button size="lg" variant="outline" className="flex-1">
-              Buy Now
-            </Button>
           </div>
         </div>
       </div>

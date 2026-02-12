@@ -5,9 +5,12 @@ import { useAppSelector } from '@/store/hooks'
 import { fetchProductById, Product } from '@/lib/api'
 import { ProductCard } from '@/components/ProductCard'
 import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
-import { Heart } from 'lucide-react'
+import { Heart, ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 export default function FavoritesPage() {
+  const router = useRouter()
   const favoriteIds = useAppSelector((state) => state.favorites.favorites)
   const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -40,6 +43,14 @@ export default function FavoritesPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Button
+        variant="outline"
+        onClick={() => router.push('/')}
+        className="mb-6 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Products
+      </Button>
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Heart className="h-8 w-8 text-primary fill-primary" />
@@ -71,8 +82,8 @@ export default function FavoritesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {favoriteProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {favoriteProducts.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
       )}
