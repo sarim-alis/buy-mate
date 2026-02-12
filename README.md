@@ -8,7 +8,7 @@ A modern, full-featured ecommerce product management dashboard built with Next.j
 - **Product Listing** - Browse products with a responsive grid layout and staggered animations
 - **Debounced Search** - Optimized real-time search (300ms debounce) across product titles and descriptions
 - **Category Filtering** - Filter products by category with Ant Design dropdown selector
-- **Date Range Filtering** - Ant Design calendar component with indigo theme and hover tooltips
+- **Date Range Filtering** - Shadcn calendar component with indigo theme and hover tooltips
 - **Smart Pagination** - Navigate through products with 10 items per page
 - **Product Details** - Comprehensive product detail pages with image gallery and add to cart
 - **Favorites System** - Redux-powered favorites with localStorage persistence
@@ -36,8 +36,7 @@ A modern, full-featured ecommerce product management dashboard built with Next.j
 - **State Management**: Redux Toolkit
 
 ### UI Libraries
-- **shadcn/ui** - Buttons, Cards, Inputs, Sheet (Cart)
-- **Ant Design** - DatePicker (RangePicker), Select
+- **shadcn/ui** - Buttons, Cards, Inputs, Sheet (Cart), Calendar, Select
 - **Icons**: Lucide React
 - **Charts**: Recharts
 
@@ -50,7 +49,6 @@ A modern, full-featured ecommerce product management dashboard built with Next.j
 1. **Clone the repository**
 ```bash
 git clone <repository-url>
-cd my-app
 ```
 
 2. **Install dependencies**
@@ -64,7 +62,7 @@ npm run dev
 ```
 
 4. **Open your browser**
-Navigate to [http://localhost:3000](http://localhost:3000)
+Navigate to http://localhost:3000
 
 ## 🏗️ Project Structure
 
@@ -130,7 +128,7 @@ Since the DummyJSON API doesn't provide date fields or support date filtering, I
 
 ### Calendar Component Customization
 
-The Ant Design RangePicker features:
+The Calendar features:
 - **Indigo Theme**: Selected dates use indigo background (#6366f1)
 - **Hover Tooltips**: Custom `cellRender` showing formatted dates (e.g., "January 15, 2026")
 - **Dual Month View**: Shows two months for easier range selection
@@ -184,8 +182,8 @@ Interactive chart using Recharts:
 
 ### Product List Page (`/`)
 - **Debounced search bar** with 300ms delay for optimized filtering
-- **Ant Design category dropdown** with all available categories
-- **Ant Design date range picker** with indigo theme and hover tooltips
+- **Shadcn category dropdown** with all available categories
+- **Shadcn date range picker** with indigo theme and hover tooltips
 - **Data visualization chart** showing products added over time
 - **Responsive product grid** (1-4 columns based on screen size)
 - **Staggered animations** - Products fade in with 50ms delays
@@ -247,7 +245,7 @@ All products are enhanced with a `dateAdded` field generated client-side.
 1. **Redux Toolkit over Context**: Chosen for scalability, better DevTools, and middleware support
 2. **Hybrid UI Approach**: 
    - shadcn/ui for core components (buttons, cards, sheet)
-   - Ant Design for complex components (DatePicker, Select) with better out-of-box functionality
+   - shadcn for complex components (DatePicker, Select) with better out-of-box functionality
 3. **Client-Side Filtering**: Since the API doesn't support date filtering, all filtering happens client-side after fetching all products once
 4. **Seeded Random Dates**: Using product ID as seed ensures dates are consistent across sessions
 5. **Indigo Theme (#6366f1)**: Custom primary color for a modern, professional look throughout
