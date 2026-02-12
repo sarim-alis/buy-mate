@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { ArrowLeft, Heart, Star, Package, TrendingUp } from 'lucide-react'
+import { ArrowLeft, Heart, Star, Package, TrendingUp, ShoppingCart } from 'lucide-react'
 import { fetchProductById, Product } from '@/lib/api'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { toggleFavorite } from '@/store/slices/favoritesSlice'
+import { addToCart } from '@/store/slices/cartSlice'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { formatDate } from '@/lib/dateUtils'
 
 export default function ProductDetailPage() {
@@ -43,23 +44,7 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Skeleton className="h-10 w-32 mb-8" />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <Skeleton className="w-full aspect-square rounded-lg" />
-            <div className="grid grid-cols-4 gap-2">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="aspect-square rounded-md" />
-              ))}
-            </div>
-          </div>
-          <div className="space-y-6">
-            <Skeleton className="h-10 w-3/4" />
-            <Skeleton className="h-6 w-1/4" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </div>
-        </div>
+        <LoadingSpinnerWithText text="Loading product details..." />
       </div>
     )
   }
@@ -165,7 +150,7 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <div className="flex items-baseline gap-3 mb-4">
+            <div className="flex items-baseline gap-3 mb-6">
               {product.discountPercentage > 0 ? (
                 <>
                   <span className="text-4xl font-bold text-primary">
@@ -184,6 +169,19 @@ export default function ProductDetailPage() {
                 </span>
               )}
             </div>
+
+            <Button 
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 text-lg font-semibold transition-all hover:scale-105"
+              onClick={() => dispatch(addToCart({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                thumbnail: product.thumbnail
+              }))}
+            >
+              <ShoppingCart className="h-5 w-5 mr-2" />
+              Add to Cart
+            </Button>
           </div>
 
           <div>

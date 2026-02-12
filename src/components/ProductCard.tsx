@@ -2,10 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart, Star } from 'lucide-react'
+import { Heart, Star, ShoppingCart } from 'lucide-react'
 import { Product } from '@/lib/api'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { toggleFavorite } from '@/store/slices/favoritesSlice'
+import { addToCart } from '@/store/slices/cartSlice'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/dateUtils'
@@ -70,17 +71,32 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.category}
         </p>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-4 pt-0 flex-col gap-3">
         <div className="flex items-center justify-between w-full">
           <span className="text-2xl font-bold text-primary">
             ${product.price.toFixed(2)}
           </span>
           {product.discountPercentage > 0 && (
             <span className="text-sm text-green-600 dark:text-green-400 font-medium">
-              -{product.discountPercentage.toFixed(0)}% off
+              -{product.discountPercentage.toFixed(0)}%
             </span>
           )}
         </div>
+        <Button 
+          className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors"
+          onClick={(e) => {
+            e.preventDefault()
+            dispatch(addToCart({
+              id: product.id,
+              title: product.title,
+              price: product.price,
+              thumbnail: product.thumbnail
+            }))
+          }}
+        >
+          <ShoppingCart className="h-4 w-4 mr-2" />
+          Add to Cart
+        </Button>
       </CardFooter>
     </Card>
   )

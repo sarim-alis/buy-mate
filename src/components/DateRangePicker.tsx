@@ -25,7 +25,10 @@ export function DateRangePicker({ dateRange, onDateRangeChange }: DateRangePicke
     ])
   }
 
-  const dateRender = (current: Dayjs) => {
+  const dateRender = (current: string | number | Dayjs) => {
+    if (typeof current === 'string' || typeof current === 'number') {
+      return <div className="ant-picker-cell-inner">{current}</div>
+    }
     const formattedDate = current.format('MMMM DD, YYYY')
     return (
       <div className="ant-picker-cell-inner" aria-label={formattedDate}>
@@ -42,7 +45,7 @@ export function DateRangePicker({ dateRange, onDateRangeChange }: DateRangePicke
       format="MMM DD, YYYY"
       placement="topLeft"
       allowClear
-      dateRender={dateRender}
+      cellRender={dateRender}
     />
   )
 }

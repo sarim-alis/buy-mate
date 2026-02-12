@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ShoppingBag, Heart } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
+import { CartSheet } from './CartSheet'
 import { useAppSelector } from '@/store/hooks'
 
 export function Header() {
@@ -29,6 +30,7 @@ export function Header() {
                 </span>
               )}
             </Link>
+            <CartSheet />
             <ThemeToggle />
           </div>
         </div>

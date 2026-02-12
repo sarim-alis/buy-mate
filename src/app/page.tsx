@@ -1,27 +1,42 @@
 "use client"
 
 import { useState, useEffect, useMemo } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter } from 'lucide-react'
 import { Select } from 'antd'
 import { fetchAllProducts, fetchCategories, Product } from '@/lib/api'
 import { ProductCard } from '@/components/ProductCard'
-import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
+import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
+import { ProductsChart } from '@/components/ProductsChart'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { DateRangePicker } from '@/components/DateRangePicker'
+import { useDebounce } from '@/hooks/useDebounce'
 
 const PRODUCTS_PER_PAGE = 10
 
 export default function Home() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null] | null>(null)
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all')
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null] | null>(() => {
+    const from = searchParams.get('dateFrom')
+    const to = searchParams.get('dateTo')
+    if (from && to) {
+      return [new Date(from), new Date(to)]
+    }
+    return null
+  })
   const [currentPage, setCurrentPage] = useState(1)
+  
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   useEffect(() => {
     async function loadData() {
@@ -50,11 +65,24 @@ export default function Home() {
     loadData()
   }, [])
 
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (debouncedSearchQuery) params.set('search', debouncedSearchQuery)
+    if (selectedCategory !== 'all') params.set('category', selectedCategory)
+    if (dateRange && dateRange[0]) {
+      params.set('dateFrom', dateRange[0].toISOString())
+      if (dateRange[1]) params.set('dateTo', dateRange[1].toISOString())
+    }
+    
+    const queryString = params.toString()
+    router.replace(queryString ? `?${queryString}` : '/', { scroll: false })
+  }, [debouncedSearchQuery, selectedCategory, dateRange, router])
+
   const filteredProducts = useMemo(() => {
     let filtered = [...products]
 
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
+    if (debouncedSearchQuery) {
+      const query = debouncedSearchQuery.toLowerCase()
       filtered = filtered.filter(product =>
         product.title.toLowerCase().includes(query) ||
         product.description.toLowerCase().includes(query)
@@ -80,7 +108,7 @@ export default function Home() {
     }
 
     return filtered
-  }, [products, searchQuery, selectedCategory, dateRange])
+  }, [products, debouncedSearchQuery, selectedCategory, dateRange])
 
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE)
   const paginatedProducts = filteredProducts.slice(
@@ -90,7 +118,7 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchQuery, selectedCategory, dateRange])
+  }, [debouncedSearchQuery, selectedCategory, dateRange])
 
   const handleClearFilters = () => {
     setSearchQuery('')
@@ -99,7 +127,7 @@ export default function Home() {
     setCurrentPage(1)
   }
 
-  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || (dateRange && dateRange[0])
+  const hasActiveFilters = debouncedSearchQuery || selectedCategory !== 'all' || (dateRange && dateRange[0])
 
   if (error) {
     return (
@@ -170,24 +198,29 @@ export default function Home() {
           </div>
         </div>
 
-        {hasActiveFilters && (
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              Showing {filteredProducts.length} result{filteredProducts.length !== 1 ? 's' : ''}
-            </p>
-            <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-              Clear all filters
-            </Button>
+        {!loading && products.length > 0 && (
+          <div className="mb-8">
+            <ProductsChart products={products} />
+          </div>
+        )}
+
+        {hasActiveFilters && filteredProducts.length > 0 && (
+          <div className="mb-6 flex items-center justify-between bg-muted/50 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                Showing {filteredProducts.length} result{filteredProducts.length !== 1 ? 's' : ''}
+              </p>
+              <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+                Clear all filters
+              </Button>
+            </div>
           </div>
         )}
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <ProductCardSkeleton key={i} />
-          ))}
-        </div>
+        <LoadingSpinnerWithText text="Loading products..." />
       ) : filteredProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
           <p className="text-lg text-muted-foreground">No products found</p>
@@ -199,9 +232,15 @@ export default function Home() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {paginatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8 animate-in fade-in duration-500">
+            {paginatedProducts.map((product, index) => (
+              <div 
+                key={product.id}
+                className="animate-in fade-in slide-in-from-bottom-4"
+                style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
+              >
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
 

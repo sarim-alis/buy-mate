@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAppSelector } from '@/store/hooks'
 import { fetchProductById, Product } from '@/lib/api'
 import { ProductCard } from '@/components/ProductCard'
-import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
+import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { Heart } from 'lucide-react'
 
 export default function FavoritesPage() {
@@ -60,11 +60,7 @@ export default function FavoritesPage() {
       )}
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {Array.from({ length: favoriteIds.length || 4 }).map((_, i) => (
-            <ProductCardSkeleton key={i} />
-          ))}
-        </div>
+        <LoadingSpinnerWithText text="Loading favorites..." />
       ) : favoriteIds.length === 0 ? (
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
           <Heart className="h-24 w-24 text-muted-foreground/30" />
