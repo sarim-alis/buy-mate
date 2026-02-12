@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { Search, Filter } from 'lucide-react'
-import { DateRange } from 'react-day-picker'
 import { fetchAllProducts, fetchCategories, Product } from '@/lib/api'
 import { ProductCard } from '@/components/ProductCard'
 import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
@@ -27,7 +26,7 @@ export default function Home() {
   
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [dateRange, setDateRange] = useState<DateRange | undefined>()
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null] | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
@@ -128,7 +127,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mb-82 space-y-4">
+      <div className="mb-8 space-y-4">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="w-full lg:w-1/4">
             <div className="relative">

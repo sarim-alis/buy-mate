@@ -1,72 +1,38 @@
 "use client"
 
-import * as React from "react"
-import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
-import { DateRange } from "react-day-picker"
+import { DatePicker } from "antd"
+import type { Dayjs } from "dayjs"
+import "./DateRangePicker.css"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+const { RangePicker } = DatePicker
 
 interface DateRangePickerProps {
-  dateRange: DateRange | undefined
-  onDateRangeChange: (range: DateRange | undefined) => void
+  dateRange: [Date | null, Date | null] | null
+  onDateRangeChange: (dates: [Date | null, Date | null] | null) => void
 }
 
 export function DateRangePicker({ dateRange, onDateRangeChange }: DateRangePickerProps) {
+  const handleChange = (dates: null | [Dayjs | null, Dayjs | null]) => {
+    if (!dates) {
+      onDateRangeChange(null)
+      return
+    }
+    
+    const [start, end] = dates
+    onDateRangeChange([
+      start ? start.toDate() : null,
+      end ? end.toDate() : null
+    ])
+  }
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          id="date"
-          variant={"outline"}
-          className={cn(
-            "w-full justify-start text-left font-normal",
-            !dateRange && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {dateRange?.from ? (
-            dateRange.to ? (
-              <>
-                {format(dateRange.from, "LLL dd, y")} -{" "}
-                {format(dateRange.to, "LLL dd, y")}
-              </>
-            ) : (
-              format(dateRange.from, "LLL dd, y")
-            )
-          ) : (
-            <span>Pick a date range</span>
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 z-[100]" align="start" side="top" sideOffset={8}>
-        <Calendar
-          initialFocus
-          mode="range"
-          defaultMonth={dateRange?.from}
-          selected={dateRange}
-          onSelect={onDateRangeChange}
-          numberOfMonths={1}
-        />
-        {dateRange?.from && (
-          <div className="p-3 border-t">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => onDateRangeChange(undefined)}
-            >
-              Clear dates
-            </Button>
-          </div>
-        )}
-      </PopoverContent>
-    </Popover>
+    <RangePicker
+      className="w-full h-10"
+      placeholder={["Start Date", "End Date"]}
+      onChange={handleChange}
+      format="MMM DD, YYYY"
+      placement="topLeft"
+      allowClear
+    />
   )
 }
