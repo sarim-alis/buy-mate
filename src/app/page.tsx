@@ -65,15 +65,15 @@ export default function Home() {
       filtered = filtered.filter(product => product.category === selectedCategory)
     }
 
-    if (dateRange?.from) {
+    if (dateRange && dateRange[0]) {
       filtered = filtered.filter(product => {
         const productDate = product.dateAdded
-        const fromDate = dateRange.from!
-        const toDate = dateRange.to || dateRange.from!
+        const fromDate = dateRange[0]!
+        const toDate = dateRange[1] || dateRange[0]!
         
         const productTime = productDate.getTime()
-        const fromTime = new Date(fromDate.setHours(0, 0, 0, 0)).getTime()
-        const toTime = new Date(toDate.setHours(23, 59, 59, 999)).getTime()
+        const fromTime = new Date(fromDate).setHours(0, 0, 0, 0)
+        const toTime = new Date(toDate).setHours(23, 59, 59, 999)
         
         return productTime >= fromTime && productTime <= toTime
       })

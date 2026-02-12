@@ -88,6 +88,50 @@
   opacity: 0.8;
 }
 
+/* Hover preview tooltip */
+.ant-picker-cell-inner {
+  position: relative;
+}
+
+.ant-picker-cell:hover .ant-picker-cell-inner::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInTooltip 0.2s ease-in forwards;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2);
+}
+
+.ant-picker-cell:hover .ant-picker-cell-inner::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInTooltip 0.2s ease-in forwards;
+}
+
+@keyframes fadeInTooltip {
+  to {
+    opacity: 1;
+  }
+}
+
 /* Dark mode support */
 .dark .ant-picker-panel-container {
   background-color: hsl(var(--popover));
@@ -95,4 +139,13 @@
 
 .dark .ant-picker-cell-in-view.ant-picker-cell-in-range::before {
   background-color: rgba(99, 102, 241, 0.2) !important;
+}
+
+.dark .ant-picker-cell:hover .ant-picker-cell-inner::after {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: black;
+}
+
+.dark .ant-picker-cell:hover .ant-picker-cell-inner::before {
+  border-top-color: rgba(255, 255, 255, 0.95);
 }
