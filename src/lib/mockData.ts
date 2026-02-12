@@ -1,4 +1,4 @@
-import { Product } from './api';
+import { Product } from '@/types/product';
 import { generateDateForProduct } from './dateUtils';
 
 export const mockProducts: Product[] = [

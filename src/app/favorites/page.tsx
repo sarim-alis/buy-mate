@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useAppSelector } from '@/store/hooks'
-import { fetchProductById, Product } from '@/lib/api'
+import { fetchProductById } from '@/lib/api'
+import { Product } from '@/types/product'
 import { ProductCard } from '@/components/ProductCard'
 import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { Heart, ArrowLeft } from 'lucide-react'

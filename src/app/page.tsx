@@ -3,7 +3,8 @@
 import { useState, useEffect, useMemo, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter } from 'lucide-react'
-import { fetchAllProducts, fetchCategories, Product } from '@/lib/api'
+import { fetchAllProducts, fetchCategories } from '@/lib/api'
+import { Product, DateRangeFilter } from '@/types/product'
 import { ProductCard } from '@/components/ProductCard'
 import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { ProductsChart } from '@/components/ProductsChart'
@@ -40,7 +41,7 @@ function HomeContent() {
   
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all')
-  const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null } | null>(() => {
+  const [dateRange, setDateRange] = useState<DateRangeFilter | null>(() => {
     const from = searchParams.get('dateFrom')
     const to = searchParams.get('dateTo')
     if (from) {

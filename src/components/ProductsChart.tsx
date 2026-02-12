@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { Product } from '@/lib/api'
+import { Product, ChartDataPoint } from '@/types/product'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
 interface ProductsChartProps {
@@ -22,7 +22,7 @@ export function ProductsChart({ products }: ProductsChartProps) {
       .sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime())
     
     let cumulative = 0
-    return sortedDates.map(([date, count]) => {
+    return sortedDates.map(([date, count]): ChartDataPoint => {
       cumulative += count
       return {
         date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),

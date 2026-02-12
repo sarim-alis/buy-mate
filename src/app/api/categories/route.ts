@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { CategoryResponse } from '@/types/product';
 
 async function fetchWithRetry(url: string, options: RequestInit, retries = 3) {
   for (let i = 0; i < retries; i++) {
@@ -38,7 +39,7 @@ export async function GET() {
     const data = await response.json();
     
     const categories = Array.isArray(data) 
-      ? data.map((cat: any) => typeof cat === 'string' ? cat : cat.slug || cat.name)
+      ? data.map((cat: string | CategoryResponse) => typeof cat === 'string' ? cat : cat.slug || cat.name)
       : data;
     
     return NextResponse.json(categories);

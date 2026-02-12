@@ -1,31 +1,12 @@
 import { generateDateForProduct } from './dateUtils';
+import { Product, ProductsResponse, RawProduct } from '@/types/product';
+
+export type { Product, ProductsResponse };
 
 const BASE_URL = 'https://dummyjson.com';
 const USE_PROXY = typeof window !== 'undefined'; // Use proxy for client-side requests
 
-export interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-  dateAdded: Date;
-}
-
-export interface ProductsResponse {
-  products: Product[];
-  total: number;
-  skip: number;
-  limit: number;
-}
-
-function addDateToProduct(product: any): Product {
+function addDateToProduct(product: RawProduct): Product {
   return {
     ...product,
     dateAdded: generateDateForProduct(product.id)

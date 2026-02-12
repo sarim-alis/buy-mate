@@ -5,6 +5,7 @@ import { CalendarIcon, X } from "lucide-react"
 import { format } from "date-fns"
 import { DateRange } from "react-day-picker"
 
+import { DateRangeFilter } from '@/types/product'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -15,8 +16,8 @@ import {
 } from "@/components/ui/popover"
 
 interface DateRangePickerProps {
-  dateRange: { from: Date | null; to: Date | null } | null
-  onDateRangeChange: (dates: { from: Date | null; to: Date | null } | null) => void
+  dateRange: DateRangeFilter | null
+  onDateRangeChange: (dates: DateRangeFilter | null) => void
 }
 
 export function DateRangePicker({ dateRange, onDateRangeChange }: DateRangePickerProps) {
