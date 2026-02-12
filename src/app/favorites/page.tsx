@@ -1,5 +1,6 @@
 "use client"
 
+// Imports.
 import { useState, useEffect } from 'react'
 import { useAppSelector } from '@/store/hooks'
 import { fetchProductById } from '@/lib/api'
@@ -12,11 +13,13 @@ import { Button } from '@/components/ui/button'
 
 export default function FavoritesPage() {
   const router = useRouter()
+  // States.
   const favoriteIds = useAppSelector((state) => state.favorites.favorites)
   const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // Load favorites.
   useEffect(() => {
     async function loadFavorites() {
       if (favoriteIds.length === 0) {
@@ -70,7 +73,7 @@ export default function FavoritesPage() {
       </div>
 
       {error && (
-        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="flex flex-col items-center justify-center min-h-100 gap-4">
           <p className="text-lg text-destructive">{error}</p>
         </div>
       )}
@@ -78,7 +81,7 @@ export default function FavoritesPage() {
       {loading ? (
         <LoadingSpinnerWithText text="Loading favorites..." />
       ) : favoriteIds.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="flex flex-col items-center justify-center min-h-100 gap-4">
           <Heart className="h-24 w-24 text-muted-foreground/30" />
           <p className="text-lg text-muted-foreground">No favorite products yet</p>
           <p className="text-sm text-muted-foreground">

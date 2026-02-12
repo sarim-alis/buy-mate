@@ -1,5 +1,6 @@
 "use client"
 
+// Imports.
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -21,11 +22,13 @@ export default function ProductDetailPage() {
   const dispatch = useAppDispatch()
   const favorites = useAppSelector((state) => state.favorites.favorites)
   
+  // States.
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState(0)
 
+  // Load products.
   useEffect(() => {
     async function loadProduct() {
       try {
@@ -118,6 +121,7 @@ export default function ProductDetailPage() {
           <div>
             <div className="flex items-start justify-between gap-4 mb-2">
               <h1 className="text-3xl lg:text-4xl font-bold">{product.title}</h1>
+              {/* Favorites */}
               <Button
                 variant="outline"
                 size="icon"
@@ -175,6 +179,7 @@ export default function ProductDetailPage() {
               )}
             </div>
 
+            {/* Add to cart */}
             <Button 
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 text-lg font-semibold transition-all hover:scale-105"
               onClick={() => {

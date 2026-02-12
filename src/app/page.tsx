@@ -1,5 +1,6 @@
 "use client"
 
+// Imports.
 import { useState, useEffect, useMemo, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Search, Filter } from 'lucide-react'
@@ -10,16 +11,9 @@ import { LoadingSpinnerWithText } from '@/components/LoadingSpinner'
 import { ProductsChart } from '@/components/ProductsChart'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DateRangePicker } from '@/components/DateRangePicker'
 import { useDebounce } from '@/hooks/useDebounce'
-
 const PRODUCTS_PER_PAGE = 10
 
 export default function Home() {
@@ -33,12 +27,11 @@ export default function Home() {
 function HomeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  
+  // States.
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all')
   const [dateRange, setDateRange] = useState<DateRangeFilter | null>(() => {
@@ -50,9 +43,9 @@ function HomeContent() {
     return null
   })
   const [currentPage, setCurrentPage] = useState(1)
-  
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
+  // Load products.
   useEffect(() => {
     async function loadData() {
       try {
