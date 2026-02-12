@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/store/StoreProvider";
 import { LayoutContent } from "@/components/LayoutContent";
+import "react-day-picker/dist/style.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
